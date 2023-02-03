@@ -9,10 +9,13 @@ from django.conf import settings
 
 from filing.models import Filing
 from schemas.model_accumulator import Accumulator
-from irsx.settings import INDEX_DIRECTORY
-from irsx.file_utils import stream_download
-from irsx.xmlrunner import XMLRunner
-from irsx.filing import FileMissingException
+
+import sys
+sys.path.append('990-xml-reader')
+from irs_reader.settings import INDEX_DIRECTORY
+from irs_reader.file_utils import stream_download
+from irs_reader.xmlrunner import XMLRunner
+# from irs_reader.filing import FileMissingException
 
 
 # this is how many we process; there's a separate batch size
@@ -56,7 +59,6 @@ class Command(BaseCommand):
     def run_filing(self, filing):
         object_id = filing.object_id
 
-        
         parsed_filing = self.xml_runner.run_filing(object_id)
 
         if not parsed_filing:
@@ -64,7 +66,7 @@ class Command(BaseCommand):
             return None
         
         schedule_list = parsed_filing.list_schedules()
-        #print("sked list is %s" % schedule_list)
+        # print("sked list is %s" % schedule_list)
 
         result = parsed_filing.get_result()
             
@@ -120,12 +122,12 @@ class Command(BaseCommand):
 
             for filing in filings:
                 #print("Handling id %s" % filing.object_id)
-                try:
-                    self.run_filing(filing)
-                except FileMissingException:
-                    print("File missing %s, skipping" % filing.object_id)
-                    missing_filings += 1
-                    missed_file_list.append(filing.object_id)
+                # try:
+                self.run_filing(filing)
+                # except FileMissingException:
+                #     print("File missing %s, skipping" % filing.object_id)
+                #     missing_filings += 1
+                #     missed_file_list.append(filing.object_id)
                 process_count += 1
                 if process_count % 1000 == 0:
                     print("Handled %s filings" % process_count)

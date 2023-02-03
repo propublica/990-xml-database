@@ -14,14 +14,14 @@ class Filing(models.Model):
     submission_year = models.IntegerField(blank=False, null=False, default=0, help_text="Index file year")
 
     # Verbatim fields set from the csv file
-    return_id = models.CharField(max_length=8, blank=False, null=False, default="", help_text="Return ID")
-    filing_type = models.CharField(max_length=5, blank=False, null=False, default="", help_text="Always EFILE")
+    return_id = models.CharField(max_length=100,blank=False, null=False, default="", help_text="Return ID")
+    filing_type = models.CharField(max_length=100,blank=False, null=False, default="", help_text="Always EFILE")
     ein = models.CharField(max_length=9, blank=False, null=False, default="", help_text="Employer ID number")
     tax_period = models.IntegerField(blank=False, null=False, default=0, help_text="Month filed, YYYYMM")
-    sub_date = models.CharField(max_length=22, blank=False, null=False, default="", help_text="Submitted date in "
+    sub_date = models.CharField(max_length=100,blank=False, null=False, default="", help_text="Submitted date in "
                                 "YYYY-MM-DD format. But submitted to whom?")
-    taxpayer_name = models.CharField(max_length=100, blank=False, null=False, default="", help_text="Organization name")
-    return_type = models.CharField(max_length=5, blank=False, null=False, default="", help_text="Return type")
+    taxpayer_name = models.CharField(max_length=150,blank=False, null=False, default="", help_text="Organization name")
+    return_type = models.CharField(max_length=100,blank=False, null=False, default="", help_text="Return type")
     dln = models.CharField(max_length=14, blank=False, null=False, default="", help_text="Document Locator Number")
     object_id = models.CharField(max_length=18, blank=False, null=False, default="", help_text="IRS-assigned unique ID")
 
@@ -31,10 +31,10 @@ class Filing(models.Model):
                                    "tax_period")
     
     # Processing notes
-    parse_started = models.NullBooleanField(help_text="Set this true when parsing begins")
-    parse_complete = models.NullBooleanField(null=True, help_text="Set true when data stored")
+    parse_started = models.BooleanField(null=True,help_text="Set this true when parsing begins")
+    parse_complete = models.BooleanField(null=True, help_text="Set true when data stored")
     process_time = models.DateTimeField(null=True, help_text="When was parsing complete?")
-    is_error = models.NullBooleanField(help_text="Was an error of any type encountered during parsing")
+    is_error = models.BooleanField(null=True,help_text="Was an error of any type encountered during parsing")
     key_error_count = models.IntegerField(blank=True, null=True, help_text="Number of key errors found")
     error_details = models.TextField(null=True, help_text="Describe error condition")
 

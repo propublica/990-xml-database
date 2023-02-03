@@ -20,7 +20,7 @@ class Variable(IRSxBase):
     description = models.TextField(help_text="IRS-supplied description, from .xsd. ") 
     version_start = models.TextField(help_text="Start year", null=True) 
     version_end = models.TextField(help_text="End year", null=True) 
-    is_canonical = models.NullBooleanField(help_text="", default=False) 
+    is_canonical = models.BooleanField(null=True,help_text="", default=False) 
     canonical_version = models.CharField(max_length=16, blank=True, null=True, help_text="canonical_version", editable=False)
 
     def get_absolute_url(self):
@@ -30,7 +30,7 @@ class Group(IRSxBase):
     db_name = models.CharField(max_length=63, blank=True, null=True, help_text="DB name", editable=False) 
     line_number = models.CharField(max_length=255, blank=True, null=True, help_text="IRS-supplied line numbers. Missing for returnheaders", editable=False) 
     description = models.TextField(help_text="IRS-supplied description, from .xsd. ") 
-    headless = models.NullBooleanField(help_text="", default=False) 
+    headless = models.BooleanField(null=True,help_text="", default=False) 
     version_start = models.TextField(help_text="Start year", null=True) 
     version_end = models.TextField(help_text="End year", null=True) 
 
@@ -40,7 +40,7 @@ class Group(IRSxBase):
 class SchedulePart(IRSxBase):
     part_name = models.CharField(max_length=255, blank=True, null=True, help_text="Part Name.", editable=False) 
     xml_root = models.CharField(max_length=255, blank=True, null=True, help_text="xpath", editable=False) #is this not equivalent to xpath? 
-    is_shell = models.NullBooleanField(help_text="", default=False) 
+    is_shell = models.BooleanField(null=True,help_text="", default=False) 
 
     def get_absolute_url(self):
         return ("/metadata/parts/%s.html" % self.parent_sked_part)

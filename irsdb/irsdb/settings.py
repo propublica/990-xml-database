@@ -129,9 +129,13 @@ STATICFILES_DIRS = [
 ]
 
 # will break without irsx
-from irsx.settings import METADATA_DIRECTORY, KNOWN_SCHEDULES
+import sys
+sys.path.append('../990-xml-reader')
+from irs_reader.settings import METADATA_DIRECTORY, KNOWN_SCHEDULES
 
 GENERATED_MODELS_DIR = os.path.join(BASE_DIR, "generated_schemas")
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 ## suppress verbose complaints by uncommenting
 #import warnings

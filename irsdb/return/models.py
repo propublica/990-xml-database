@@ -11112,10 +11112,10 @@ class returnheader990x_part_i(models.Model):
     RtrnHdr_TxYr = models.IntegerField(null=True, blank=True)
     # most recent xpath: /ReturnHeader/TaxYr 
 
-    FlngScrtyInfrmtn_FdrlOrgnlSbmssnIdDt = models.CharField(null=True, blank=True, max_length=31)
+    FlngScrtyInfrmtn_FdrlOrgnlSbmssnIdDt = models.CharField(null=True, blank=True, max_length=50)
     # most recent xpath: /ReturnHeader/FilingSecurityInformation/FederalOriginalSubmissionIdDt 
 
-    FlngScrtyInfrmtn_IPDt = models.CharField(null=True, blank=True, max_length=31)
+    FlngScrtyInfrmtn_IPDt = models.CharField(null=True, blank=True, max_length=50)
     # most recent xpath: /ReturnHeader/FilingSecurityInformation/IPDt 
 
     RtrnHdr_DsstrRlfTxt = models.CharField(null=True, blank=True, max_length=100)
@@ -11172,7 +11172,7 @@ class returnheader990x_part_i(models.Model):
     BsnssOffcr_TxpyrPIN = models.CharField(null=True, blank=True, max_length=5)
     # most recent xpath: /ReturnHeader/BusinessOfficerGrp/TaxpayerPIN 
 
-    RtrnHdr_TxPrdBgnDt = models.CharField(null=True, blank=True, max_length=31)
+    RtrnHdr_TxPrdBgnDt = models.CharField(null=True, blank=True, max_length=50)
     # most recent xpath: /ReturnHeader/TaxPeriodBeginDt 
 
     Flr_EIN = models.CharField(null=True, blank=True, max_length=9)
@@ -11199,7 +11199,7 @@ class returnheader990x_part_i(models.Model):
     FlngScrtyInfrmtn_FlngLcnsCd = models.TextField(null=True, blank=True)
     # most recent xpath: /ReturnHeader/FilingSecurityInformation/FilingLicenseTypeCd 
 
-    RtrnHdr_TxPrdEndDt = models.CharField(null=True, blank=True, max_length=31)
+    RtrnHdr_TxPrdEndDt = models.CharField(null=True, blank=True,max_length=50)
     # most recent xpath: /ReturnHeader/TaxPeriodEndDt 
 
     PrprrFrgnAddrss_AddrssLn2Txt = models.CharField(null=True, blank=True, max_length=35)
@@ -11241,7 +11241,7 @@ class returnheader990x_part_i(models.Model):
     PrprrUSAddrss_SttAbbrvtnCd = models.CharField(null=True, blank=True, max_length=2)
     # Description: State  most recent xpath: /ReturnHeader/PreparerFirmGrp/PreparerUSAddress/StateAbbreviationCd 
 
-    PrprrPrsn_PrprtnDt = models.CharField(null=True, blank=True, max_length=31)
+    PrprrPrsn_PrprtnDt = models.CharField(null=True, blank=True, max_length=50)
     # most recent xpath: /ReturnHeader/PreparerPersonGrp/PreparationDt 
 
     PrprrFrgnAddrss_PrvncOrSttNm = models.TextField(null=True, blank=True)
@@ -11265,10 +11265,10 @@ class returnheader990x_part_i(models.Model):
     RtrnHdr_SftwrVrsnNm = models.CharField(null=True, blank=True, max_length=20)
     # most recent xpath: /ReturnHeader/SoftwareVersionNum 
 
-    IPAddrss_IPv4AddrssTxt = models.CharField(null=True, blank=True, max_length=31)
+    IPAddrss_IPv4AddrssTxt = models.CharField(null=True, blank=True, max_length=50)
     # most recent xpath: /ReturnHeader/FilingSecurityInformation/IPAddress/IPv4AddressTxt 
 
-    FlngScrtyInfrmtn_IPTmznCd = models.CharField(null=True, blank=True, max_length=31)
+    FlngScrtyInfrmtn_IPTmznCd = models.CharField(null=True, blank=True, max_length=50)
     # most recent xpath: /ReturnHeader/FilingSecurityInformation/IPTimezoneCd 
 
     RtrnHdr_SgntrOptnCd = models.TextField(null=True, blank=True)
@@ -11292,7 +11292,7 @@ class returnheader990x_part_i(models.Model):
     RtrnHdr_PINEntrdByCd = models.TextField(null=True, blank=True)
     # most recent xpath: /ReturnHeader/PINEnteredByCd 
 
-    IPAddrss_IPv6AddrssTxt = models.CharField(null=True, blank=True, max_length=31)
+    IPAddrss_IPv6AddrssTxt = models.CharField(null=True, blank=True, max_length=50)
     # most recent xpath: /ReturnHeader/FilingSecurityInformation/IPAddress/IPv6AddressTxt 
 
     FrgnAddrss_AddrssLn2Txt = models.CharField(null=True, blank=True, max_length=35)
@@ -11307,7 +11307,7 @@ class returnheader990x_part_i(models.Model):
     FlngScrtyInfrmtn_FdrlOrgnlSbmssnId = models.TextField(null=True, blank=True)
     # most recent xpath: /ReturnHeader/FilingSecurityInformation/FederalOriginalSubmissionId 
 
-    BsnssOffcr_SgntrDt = models.CharField(null=True, blank=True, max_length=31)
+    BsnssOffcr_SgntrDt = models.CharField(null=True, blank=True, max_length=50)
     # most recent xpath: /ReturnHeader/BusinessOfficerGrp/SignatureDt 
 
     FrgnAddrss_CntryCd = models.CharField(null=True, blank=True, max_length=2)

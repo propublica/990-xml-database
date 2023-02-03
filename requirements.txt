@@ -8,7 +8,6 @@ psycopg2
 # mysqlclient
 
 # 
-irsx
 requests
 unidecode
 
