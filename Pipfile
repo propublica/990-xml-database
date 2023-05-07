@@ -8,6 +8,7 @@ django = ">=2.0.1"
 psycopg2 = "*"
 requests = "*"
 unidecode = "*"
+irsx = {ref = "main", git = "https://github.com/propublica/990-xml-reader.git"}
 
 [dev-packages]
 
