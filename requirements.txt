@@ -2,7 +2,7 @@
 Django>=2.0.1
 
 # for postgres:
-psycopg2
+psycopg2-binary
 
 # for mysql 
 # mysqlclient
@@ -10,4 +10,6 @@ psycopg2
 # 
 requests
 unidecode
+dj_database_url
 
+git+https://github.com/propublica/990-xml-reader
