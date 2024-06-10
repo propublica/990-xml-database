@@ -101,7 +101,7 @@ class Command(BaseCommand):
 
     def get_immigration_eins(self):
         eins = set()
-        with open("../data/raw/immigration-eins.txt", "r") as f:
+        with open("../data/raw/all-immigration-ein-matches.txt", "r") as f:
             for line in f.readlines():
                 eins.add(line.strip())
 
