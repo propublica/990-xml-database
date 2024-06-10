@@ -22,7 +22,13 @@ def main():
     year = sys.argv[1]
 
     urls = []
-    eins = get_immigration_eins()
+    eins = []
+    for ein in get_immigration_eins():
+        if len(ein) < 9:
+            eins.append(ein.strip())
+        else:
+            eins.append(ein.strip().zfill(9))
+
     with open(f"./data/raw/index_{year}.csv") as index_file:
         reader = csv.DictReader(index_file)
         for row in reader:

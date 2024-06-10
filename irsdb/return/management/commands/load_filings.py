@@ -134,7 +134,12 @@ class Command(BaseCommand):
         missing_filings = 0
         missed_file_list = []
 
-        eins = self.get_immigration_eins()
+        eins = []
+        for ein in self.get_immigration_eins():
+            if len(ein) < 9:
+                eins.append(ein)
+            else:
+                eins.append(ein.zfill(9))
         while True:
             filings = Filing.objects.filter(submission_year=year, ein__in=eins).exclude(
                 parse_complete=True
