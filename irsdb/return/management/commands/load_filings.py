@@ -20,7 +20,6 @@ class Command(BaseCommand):
     help = """
     Enter the filings, one by one.
     Loading is done in bulk, though status on the filings is updated one at a time.
-   
     """
 
     def add_arguments(self, parser):
@@ -57,20 +56,20 @@ class Command(BaseCommand):
 
         if not parsed_filing:
             print(
-                "Skipping filing %s(filings with pre-2013 filings are skipped)\n row details: %s"
-                % (filing, metadata_row)
+                "Skipping filing %s(filings with pre-2013 filings are skipped)\n row details:"
+                % (filing,)
             )
             return None
 
-        schedule_list = parsed_filing.list_schedules()
+        # schedule_list = parsed_filing.list_schedules()
         # print("sked list is %s" % schedule_list)
 
         result = parsed_filing.get_result()
 
         keyerrors = parsed_filing.get_keyerrors()
         schema_version = parsed_filing.get_version()
-        ## This could be disabled if we don't care about the schema version
-        ## This is one save per loaded row...
+        # This could be disabled if we don't care about the schema version
+        # This is one save per loaded row...
         if filing.schema_version != schema_version:
             filing.schema_version = schema_version
             filing.save()

@@ -43,11 +43,11 @@ class Command(BaseCommand):
             if repeating_group_part:
                 result += "# A repeating structure from %s\n" % (repeating_group_part)
             result += "#\n#######\n"
-            ## write the start of the first group:
+            # write the start of the first group:
             result += "\nclass %s(models.Model):\n" % sked_name
             result += (
                 soft_tab
-                + 'object_id = models.CharField(max_length=31, blank=True, null=True, help_text="unique xml return id")\n'
+                + 'object_id = models.CharField(max_length=31, blank=True, null=True, help_text="unique xml return id")\n' # noqa
             )
             result += (
                 soft_tab
@@ -68,7 +68,7 @@ class Command(BaseCommand):
             if repeating_group_part:
                 result += "# A repeating structure from %s\n" % (repeating_group_part)
             result += "#\n#######\n"
-            ## write the start of the first group:
+            # write the start of the first group:
             result += "\nclass %s(Base):\n%s__tablename__='%s'\n" % (
                 sked_name,
                 soft_tab,

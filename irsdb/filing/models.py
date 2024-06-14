@@ -1,7 +1,6 @@
 import os
 import re
 
-from django.conf import settings
 from django.db import models
 from irsx import settings as irsx_settings
 

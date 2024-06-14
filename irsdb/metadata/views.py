@@ -107,7 +107,6 @@ def show_variable(request, db_name, variable_name):
     template = "metadata/variable.html"
 
     if BAKE_OUT:
-        filepath = this_variable.get_absolute_url()
         bake(request, template, context)
     return render(request, template, context)
 
@@ -169,14 +168,14 @@ def join_groups_to_parts():
                 metadata_group.parent_sked_part,
                 metadata_group.db_name,
                 metadata_schedulepart.ordering
-            FROM    
-                metadata_group 
-            LEFT JOIN 
-                metadata_schedulepart 
-            ON metadata_group.parent_sked_part = metadata_schedulepart.parent_sked_part 
+            FROM
+                metadata_group
+            LEFT JOIN
+                metadata_schedulepart
+            ON metadata_group.parent_sked_part = metadata_schedulepart.parent_sked_part
             AND metadata_group.parent_sked = metadata_schedulepart.parent_sked
-            ORDER BY 
-                metadata_group.parent_sked, 
+            ORDER BY
+                metadata_group.parent_sked,
                 metadata_schedulepart.ordering;
         """
         cursor.execute(RAW_SQL)
@@ -199,7 +198,6 @@ def show_forms(request):
     """
     parts = SchedulePart.objects.all().order_by("parent_sked", "ordering")
     form_hash = {}
-    part_hash = {}
 
     # Sorta laboriously rebuild data structure from metadata.csv files. They weren't designed for this!
     for schedule in KNOWN_SCHEDULES:

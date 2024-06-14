@@ -1,16 +1,10 @@
-import csv
-import os
 from datetime import datetime
 from queue import Queue
 from threading import Thread
 
-import requests
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection
 from filing.models import Filing
-from irsx.file_utils import stream_download
-from irsx.settings import INDEX_DIRECTORY
 from irsx.xmlrunner import XMLRunner
 from schemas.model_accumulator import Accumulator
 
@@ -52,12 +46,12 @@ class DownloadWorker(Thread):
         parsed_filing = self.xml_runner.run_filing(object_id)
         if not parsed_filing:
             print(
-                "Skipping filing %s(filings with pre-2013 filings are skipped)\n row details: %s"
-                % (filing, metadata_row)
+                "Skipping filing %s(filings with pre-2013 filings are skipped)\n row details:"
+                % (filing,)
             )
             return None
 
-        schedule_list = parsed_filing.list_schedules()
+        # schedule_list = parsed_filing.list_schedules()
         # print("sked list is %s" % schedule_list)
 
         result = parsed_filing.get_result()
@@ -98,7 +92,6 @@ class Command(BaseCommand):
     help = """
     Enter the filings, one by one.
     Loading is done in bulk, though status on the filings is updated one at a time.
-   
     """
 
     def add_arguments(self, parser):
@@ -131,13 +124,13 @@ class Command(BaseCommand):
 
         parsed_filing = self.xml_runner.run_filing(object_id)
         if not parsed_filing:
-            print(
-                "Skipping filing %s(filings with pre-2013 filings are skipped)\n row details: %s"
-                % (filing, metadata_row)
-            )
+            # print(
+            #     "Skipping filing %s(filings with pre-2013 filings are skipped)\n row details: %s"
+            #     % (filing, metadata_row)
+            # )
             return None
 
-        schedule_list = parsed_filing.list_schedules()
+        # schedule_list = parsed_filing.list_schedules()
         # print("sked list is %s" % schedule_list)
 
         result = parsed_filing.get_result()

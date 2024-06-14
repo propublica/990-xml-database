@@ -1,7 +1,6 @@
 import csv
 import os
 
-import requests
 from django.core.management.base import BaseCommand
 from irsx.file_utils import get_index_file_URL, stream_download
 from irsx.settings import INDEX_DIRECTORY
@@ -50,8 +49,27 @@ class Command(BaseCommand):
                         dln = line["DLN"]
                         object_id = line["OBJECT_ID"]
                         sub_year = year
-                        # (return_id,filing_type, ein, tax_period, sub_date, taxpayer_name, return_type, dln, object_id) = line[0:8]
-                        # print(return_id, ein, tax_period, sub_date, taxpayer_name, return_type, dln, object_id)
+                        # (
+                        #     return_id,
+                        #     filing_type,
+                        #     ein,
+                        #     tax_period,
+                        #     sub_date,
+                        #     taxpayer_name,
+                        #     return_type,
+                        #     dln,
+                        #     object_id,
+                        # ) = line[0:8]
+                        # print(
+                        #     return_id,
+                        #     ein,
+                        #     tax_period,
+                        #     sub_date,
+                        #     taxpayer_name,
+                        #     return_type,
+                        #     dln,
+                        #     object_id,
+                        # )
                     else:
                         return_id = ""
                         filing_type = "EFILE"
@@ -64,10 +82,10 @@ class Command(BaseCommand):
                         object_id = line["object_id"]
                         try:
                             sub_year = line["year"]
-                        except Exception as e:
+                        except Exception:
                             sub_year = int(year.replace("new_", ""))
 
-                except ValueError as err:
+                except ValueError:
                     print("Error with line: {line}".format(line=line))
                     if year == 2014:
                         print(
@@ -76,7 +94,7 @@ class Command(BaseCommand):
                     raise
 
                 try:
-                    obj = Filing.objects.get(object_id=object_id)
+                    Filing.objects.get(object_id=object_id)
                 except Filing.DoesNotExist:
                     new_sub = Filing(
                         return_id=return_id,

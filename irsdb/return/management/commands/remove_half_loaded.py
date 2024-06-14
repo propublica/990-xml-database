@@ -4,8 +4,8 @@ from django.db import connection
 
 class Command(BaseCommand):
     help = """
-    remove all filings from a given year that appear to be loading errors; where parse_start is true and 
-    parse_complete = False.
+    remove all filings from a given year that appear to be loading
+    errors; where parse_start is true and parse_complete = False.
     """
 
     def add_arguments(self, parser):
@@ -17,7 +17,7 @@ class Command(BaseCommand):
         self.submission_year = int(options["year"][0])
 
         BASE_QUERY = (
-            "(select object_id from filing_filing where parse_started=True and parse_complete=False and submission_year=%s)"
+            """(select object_id from filing_filing where parse_started=True and parse_complete=False and submission_year=%s)"""
             % self.submission_year
         )
 

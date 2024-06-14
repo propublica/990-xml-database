@@ -1,5 +1,4 @@
 from django.apps import apps
-from django.forms import model_to_dict
 
 # Setting too big will create memory problems
 BATCH_SIZE = 100
@@ -59,8 +58,10 @@ class Accumulator(object):
             self.model_dict[model_name] = []
 
     def add_model(self, model_name, model_dict):
-        # An artifact upstream is creating empty rows, with no name and only an ein and object_id
-        # This is probably related to the 'empty head' rows in variables.csv, which will be excised by loading this db and analyzing
+        # An artifact upstream is creating empty rows, with no name
+        # and only an ein and object_id This is probably related to
+        # the 'empty head' rows in variables.csv, which will be
+        # excised by loading this db and analyzing
         if not model_name:
             print(
                 "###Model name is missing in object_id %s\ndict=%s!!!"

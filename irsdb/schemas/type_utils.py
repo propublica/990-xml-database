@@ -1,11 +1,11 @@
 """
-Hand curated list of types that occur in IRS fillings, and their representations
-in django and sqlalchemy. The latter is pretty rough.
+Hand curated list of types that occur in IRS fillings, and their
+representations in django and sqlalchemy. The latter is pretty rough.
 
 Defaults to a text field when definitions are missing.
 
 In general the IRS adapts type definitions to shoehorn in old data,
-so using current definitions is usually good enough for older stuff... to a point. 
+so using current definitions is usually good enough for older stuff... to a point.
 
 This list is tied to 2013 forwards, maybe this should be namespaced or linked somehow.
 
@@ -78,7 +78,7 @@ var_types = {
     "TimeType": {
         "type": "Char",
         "length": 15,
-    },  #  Should be no more than 9 chars, but... [0-9]{2}:[0-9]{2}:[0-9]{2}
+    },  # Should be no more than 9 chars, but... [0-9]{2}:[0-9]{2}:[0-9]{2}
     "CUSIPNumberType": {"type": "Char", "length": 9},
     "SSNType": {
         "type": "Char",

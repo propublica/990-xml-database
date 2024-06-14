@@ -3,7 +3,7 @@ import os
 import requests
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from metadata.models import *
+from irsdb.metadata.models import SchedulePart, Group, Variable
 
 METADATA_DIRECTORY = settings.METADATA_DIRECTORY
 REPORT_COUNT = 100
@@ -14,7 +14,7 @@ FILE_SYSTEM_BASE = settings.FILE_SYSTEM_BASE
 
 class Command(BaseCommand):
     help = """
-                Bake the site out to files. 
+            Bake the site out to files.
             """
 
     def hit_url(self, url):
@@ -83,7 +83,7 @@ class Command(BaseCommand):
         self.run_variables()
 
 
-"""
+r"""
     re_path(r'xpath/(?P<xpath>.+).html', views.show_xpath),
     re_path(r'variable/(?P<db_name>[\w\d\_]+)\-(?P<variable_name>[\w\d]+).html$', views.show_variable),
 """
