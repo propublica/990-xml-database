@@ -1,5 +1,7 @@
-from django.apps import AppConfig
 import os
+
+from django.apps import AppConfig
+
 
 class MetadataConfig(AppConfig):
     name = "irsdb.metadata"
