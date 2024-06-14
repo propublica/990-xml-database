@@ -119,24 +119,15 @@ class Command(BaseCommand):
         missing_filings = 0
         missed_file_list = []
 
-<<<<<<< HEAD
-        eins = []
-        for ein in self.get_immigration_eins():
-            if len(ein) < 9:
-                eins.append(ein)
-            else:
-                eins.append(ein.zfill(9))
-=======
         eins = set()
 
         if options["file"]:
             with open(options["file"]) as f:
                 reader = csv.DictReader(f)
                 for row in reader:
-                    eins.add(row["ein"])
+                    eins.add(row["ein"].zfill(9))
 
         Filing.objects.update(parse_complete=False, parse_started=False)
->>>>>>> 42beccf (installable/cleanup)
         while True:
             if eins:
                 filings = Filing.objects.filter(
