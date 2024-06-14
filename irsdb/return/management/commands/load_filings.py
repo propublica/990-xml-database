@@ -2,7 +2,7 @@ import csv
 from datetime import datetime
 
 from django.core.management.base import BaseCommand
-from irsx.filing import FileMissingException
+from irsx.filing import FileMissingException, InvalidXMLException
 from irsx.xmlrunner import XMLRunner
 
 from irsdb.filing.models import Filing
@@ -52,7 +52,10 @@ class Command(BaseCommand):
     def run_filing(self, filing):
         object_id = filing.object_id
 
-        parsed_filing = self.xml_runner.run_filing(object_id)
+        try:
+            parsed_filing = self.xml_runner.run_filing(object_id)
+        except InvalidXMLException:
+            parsed_filing = None
 
         if not parsed_filing:
             print(
