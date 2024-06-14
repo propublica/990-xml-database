@@ -3,7 +3,8 @@ import os
 import requests
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from irsdb.metadata.models import SchedulePart, Group, Variable
+
+from irsdb.metadata.models import Group, SchedulePart, Variable
 
 METADATA_DIRECTORY = settings.METADATA_DIRECTORY
 REPORT_COUNT = 100

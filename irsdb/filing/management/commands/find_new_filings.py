@@ -3,8 +3,9 @@ import os
 from os.path import isfile, join
 
 from django.core.management.base import BaseCommand
-from irsdb.filing.models import Filing
 from irsx.settings import WORKING_DIRECTORY
+
+from irsdb.filing.models import Filing
 
 
 class Command(BaseCommand):

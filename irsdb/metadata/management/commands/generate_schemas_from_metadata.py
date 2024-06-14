@@ -47,7 +47,7 @@ class Command(BaseCommand):
             result += "\nclass %s(models.Model):\n" % sked_name
             result += (
                 soft_tab
-                + 'object_id = models.CharField(max_length=31, blank=True, null=True, help_text="unique xml return id")\n' # noqa
+                + 'object_id = models.CharField(max_length=31, blank=True, null=True, help_text="unique xml return id")\n'  # noqa
             )
             result += (
                 soft_tab
