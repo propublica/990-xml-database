@@ -4,6 +4,6 @@ from django.apps import AppConfig
 
 
 class MetadataConfig(AppConfig):
-    name = "irsdb.metadata"
-    verbose_name = "IRSdb - Metadata"
+    name = "irsdb.schemas"
+    verbose_name = "IRSdb - Schemas"
     path = os.path.dirname(__file__)
