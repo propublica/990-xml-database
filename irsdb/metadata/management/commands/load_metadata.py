@@ -1,11 +1,13 @@
-import os
 import csv
-from irsx.settings import METADATA_DIRECTORY
+import os
+
 from django.core.management.base import BaseCommand
-from irsdb.metadata.models import Variable, Group, SchedulePart, LineNumber, Description
+from irsx.settings import METADATA_DIRECTORY
+
+from irsdb.metadata.models import Description, Group, LineNumber, SchedulePart, Variable
 
 REPORT_COUNT = 100
-CANONICAL_VERSION = '2016v3.0'
+CANONICAL_VERSION = "2016v3.0"
 
 
 class Command(BaseCommand):
@@ -17,17 +19,17 @@ class Command(BaseCommand):
         print("Deleting variables.")
         Variable.objects.all().delete()
         infilepath = os.path.join(METADATA_DIRECTORY, "variables.csv")
-        infile = open(infilepath, 'r')
+        infile = open(infilepath, "r")
         reader = csv.DictReader(infile)
         for i, row in enumerate(reader):
 
             try:
-                self.blacklist[row['xpath']]
+                self.blacklist[row["xpath"]]
                 # it's blacklisted, so ignore
-                print("ignoring blacklisted xpath %s" % row['xpath'])
+                print("ignoring blacklisted xpath %s" % row["xpath"])
             except KeyError:
                 # not blacklisted, so create it
-            
+
                 Variable.objects.create(**row)
         print("Total Variables %s" % i)
 
@@ -35,15 +37,15 @@ class Command(BaseCommand):
         print("Deleting Groups.")
         Group.objects.all().delete()
         infilepath = os.path.join(METADATA_DIRECTORY, "groups.csv")
-        infile = open(infilepath, 'r')
+        infile = open(infilepath, "r")
         reader = csv.DictReader(infile)
         for i, row in enumerate(reader):
             try:
-                if row['headless'] == '':
-                    row['headless'] = None
+                if row["headless"] == "":
+                    row["headless"] = None
             except KeyError:
                 pass
-            if i%REPORT_COUNT == 0:
+            if i % REPORT_COUNT == 0:
                 print("Created %s rows" % i)
             Group.objects.create(**row)
         print("Total Groups %s" % i)
@@ -52,15 +54,15 @@ class Command(BaseCommand):
         print("Deleting ScheduleParts.")
         SchedulePart.objects.all().delete()
         infilepath = os.path.join(METADATA_DIRECTORY, "schedule_parts.csv")
-        infile = open(infilepath, 'r')
+        infile = open(infilepath, "r")
         reader = csv.DictReader(infile)
         for i, row in enumerate(reader):
             try:
-                if row['is_shell'] == '':
-                    row['is_shell'] = None
+                if row["is_shell"] == "":
+                    row["is_shell"] = None
             except KeyError:
                 pass
-            if i%REPORT_COUNT == 0:
+            if i % REPORT_COUNT == 0:
                 print("Created %s rows" % i)
             SchedulePart.objects.create(**row)
         print("Total Schedule Parts %s" % i)
@@ -69,16 +71,16 @@ class Command(BaseCommand):
         print("Deleting LineNumbers.")
         LineNumber.objects.all().delete()
         infilepath = os.path.join(METADATA_DIRECTORY, "line_numbers.csv")
-        infile = open(infilepath, 'r')
+        infile = open(infilepath, "r")
         reader = csv.DictReader(infile)
         for i, row in enumerate(reader):
-            if i%REPORT_COUNT == 0:
+            if i % REPORT_COUNT == 0:
                 print("Created %s rows" % i)
 
             try:
-                self.blacklist[row['xpath']]
+                self.blacklist[row["xpath"]]
                 # it's blacklisted, so ignore
-                print("ignoring blacklisted xpath line number... %s" % row['xpath'])
+                print("ignoring blacklisted xpath line number... %s" % row["xpath"])
             except KeyError:
                 # not blacklisted, so create it
                 LineNumber.objects.create(**row)
@@ -88,19 +90,19 @@ class Command(BaseCommand):
         print("Deleting Descriptions.")
         Description.objects.all().delete()
         infilepath = os.path.join(METADATA_DIRECTORY, "descriptions.csv")
-        infile = open(infilepath, 'r')
+        infile = open(infilepath, "r")
         reader = csv.DictReader(infile)
         for i, row in enumerate(reader):
-            if i%REPORT_COUNT == 0:
+            if i % REPORT_COUNT == 0:
                 print("Created %s rows" % i)
 
             try:
-                self.blacklist[row['xpath']]
+                self.blacklist[row["xpath"]]
                 # it's blacklisted, so ignore
-                print("ignoring blacklisted xpath description... %s" % row['xpath'])
+                print("ignoring blacklisted xpath description... %s" % row["xpath"])
             except KeyError:
                 # not blacklisted, so create it
-               Description.objects.create(**row)
+                Description.objects.create(**row)
         print("Total Description created %s" % i)
 
     def handle(self, *args, **options):
