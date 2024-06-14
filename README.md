@@ -1,33 +1,116 @@
 # 990-xml-database
-Django app to consume and store 990 data and metadata. Depends on [IRSx](https://github.com/jsfenfen/990-xml-reader) (which is installed as a dependency below).
+Installable Django apps to consume and store 990 data and metadata. Depends on [IRSx](https://github.com/jsfenfen/990-xml-reader).
 
 ## Setup and use
 
-### Part 1: clone the repo and configure the app
+This repo contains four installable django apps. 
 
-1. git clone this repository `git clone https://github.com/jsfenfen/990-xml-database.git` and `$ cd 990-xml-database`
+Two are used for loading in IRS 990 filings and returns.
 
-2. install the requirements with `pip install -r requirements.txt`. This is Django 2, so only python3 is supported.
+* `irsdb.filing`
+* `irsdb.return`
 
-3. copy the irsdb/local\_settings.py-example file to irsdb\/local_settings.py and edit it to reflect your database settings.
+And two of which are used for generating the schemas for the returns.
 
+* `irsdb.metadata`
+* `irsdb.schemas`
 
-### Part 2: Add the metadata
- 
+### Loading in 990 Filings and Returns
+To use `irsdb.filing` and `irsdb.return` in in your application, first
+install this package. You could do that by adding
+`https://github.com/datamade/990-xml-db/archive/refs/heads/feature/installable.zip`
+to your app's `requirements.txt` file.
 
-1. run `python manage.py makemigrations metadata` to generate the metadata migrations, and then run them with `python manage.py migrate metadata`.
+Then have the following settings in your app's settings.py file:
 
-2. Load the metadata with from source csv files in generated\_schemas with the management command: `python manage.py load_metadata`. This command erases the metadata before loading, so it can be rerun if it somehow breaks in the middle.
+```python
 
-3. If the csv files have changed you can generate migrations for the db by generating the models with `python manage.py generate_schemas_from_metadata` which puts the new models file in generated\_schemas/ as `django_models_auto.py` and then moving the generated models file into return/models.py and running `python manage.py makemigrations return`. 
+INSTALLED_APPS = [
+    ...
+    'irsdb.filing',
+    'irsdb.return',
+    ...
+]
 
-### Part 3: index file data 
+```
 
-The IRS releases metadata files which include the unique id, EIN and other information about each .xml filing. We need to put this in the database to make sense of the raw filings.
+Assuming you have a `manage.py` for your application, you can then run
 
-1.  run `python manage.py makemigrations filing` to generate the filing migrations, and then run them with `python manage.py migrate filing`.
+```console
+> python manage.py makemigrations
+> python manage.py migrate
+```
 
-2. Run `$ python manage.py enter_yearly_submissions <YYYY>` where YYYY is a the year corresponding to a yearly index file that has already been downloaded. { If it hasn't been downloaded you can retrieve it with irsx_index --year=YYYY }. This script checks to see if the IRS' index file is any bigger than the one one disk, and only runs if it has. You can force it to try to enter any new filings (regardless of whether the file is updated) with the `--enter` option.
+And now we are finally ready to load in the data.
+
+First, we need to load in the index of filings for a given year. That looks like
+
+```console
+> python manage.py enter_yearly_submissions 2021
+```
+
+This script checks to see if the IRS' index file is any bigger than
+the one one disk, and only runs if it has. You can force it to try to
+enter any new filings (regardless of whether the file is updated) with
+the `--enter` option.
+
+And then we can load the actual returns. If you want to return all the
+returns for a given year, you can do
+
+```console
+> python manage.py load_filings 2021
+```
+
+If you have a list of target organizations and a list of their EINs, you can just
+load those in by supplying a CSV that has a column of EINs with "ein" as the field name.
+
+```console
+> python manage.py load_filings 2021 --file=target.csv
+```
+
+### Adjusting the return models.py
+
+The IRS's 990 Schema changes over time. The `irsdb.metadata` and `irsdb.schemas` apps 
+will generate a new `models.py` that you can use for the `return` app based on what
+the `irsx` package currently knows about schemas.
+
+To use, first install this repo. You could do that by adding
+`https://github.com/datamade/990-xml-db/archive/refs/heads/feature/installable.zip`
+to your app's `requirements.txt` file.
+
+Then have the following settings in your app's settings.py file:
+
+```python
+
+INSTALLED_APPS = [
+    ...
+    'irsdb.metadata',
+    'irsdb.schemas',
+    ...
+]
+
+GENERATED_MODELS_DIR = '/where/you/want/the/output/to/go'
+
+```
+
+Assuming you have a `manage.py` for your application, you can then run
+
+```console
+> python manage.py makemigrations
+> python manage.py migrate
+```
+
+Next, run
+
+```console
+> python manage.py load_metadata
+> python manage.py generate_schemas_from_metadata
+```
+
+The `generate_schemas_from_metadata` command will create a file called `django_models_auto.py` in the directory you set `GENERATED_MODELS_DIR` to.
+
+You can replace the `irsdb/return/models.py` with this file.
+
 
 #### Sidebar: 2014 file may need fixing
 __There's a problem with the 2014 index file.__ An internal comma has "broken" the .csv format for some time. You can fix it with a perl one liner (which first backs the file up to index_2014.csv.bak before modifying it)
@@ -44,32 +127,6 @@ We can see that it worked by diffing it.
 
 For more details see [here](https://github.com/jsfenfen/990-xml-reader/blob/master/2014_is_broken.md).
 
-### Part 5: Generate the schema files - Not recommended, this is only used when regenerating models for a new IRSX version
-
-Run `$ python manage.py generate_schemas_from_metadata` to generate a django models file (to the directory generated_models). You can modify these and put them into return/models.
-
-### Part 6. Create the return tables
-
-Create the tables in the return model by running the migrations.
-
-`$ python manage.py makemigrations return`
-To make the migrations and   
-`$ python manage.py migrate return`
-to run them.
-
-### Part 7. Load the filings
-
-Actually enter the filings into the database with 
-`$ python manage.py load_filings <YYYY>`. 
-
-This script will take a while to run--probably at least several hours per year. You'll likely want to run it using nohup, so something like this:
-
-
-`$ nohup python manage.py load_filings <YYYY> &`
-
-Which detaches the terminal from the process, so if your connection times out the command keeps running.
-
-You may want to adjust your postgres settings for better loading, but you'll need to pay attention to overall memory and resource uses. 
 
 ### Post-loading concerns
 

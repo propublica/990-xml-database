@@ -1,28 +1,17 @@
 import os
 import csv
+from irsx.settings import METADATA_DIRECTORY
 from django.core.management.base import BaseCommand
-from metadata.models import *
+from irsdb.metadata.models import Variable, Group, SchedulePart, LineNumber, Description
 
-from django.conf import settings
-
-#METADATA_DIRECTORY = settings.METADATA_DIRECTORY
-METADATA_DIRECTORY = settings.GENERATED_MODELS_DIR
 REPORT_COUNT = 100
 CANONICAL_VERSION = '2016v3.0'
+
 
 class Command(BaseCommand):
     help = """
                 Erase and reload the metadata tables, one at a time.
             """
-
-    def read_blacklist(self):
-        # read the list of blacklisted xpaths, return a hash
-        infilepath = os.path.join(METADATA_DIRECTORY, "emptyhead_blacklist.txt")
-        infile = open(infilepath, 'r')
-        for row in infile:
-            xpath = row.replace("\n", "")
-            print("blacklisting xpath '%s' " % xpath)
-            self.blacklist[xpath] = True
 
     def reload_variables(self, *args, **options):
         print("Deleting variables.")
@@ -118,7 +107,6 @@ class Command(BaseCommand):
         print("Running metadata load on variables.")
         self.blacklist = {}
 
-        self.read_blacklist()
         self.reload_variables()
         self.reload_groups()
         self.reload_schedule_parts()

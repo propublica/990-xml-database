@@ -1,9 +1,0 @@
-# This means we don't support python<3
-Django>=2.0.1
-
-requests
-unidecode
-dj_database_url
-tqdm
-
-git+https://github.com/propublica/990-xml-reader

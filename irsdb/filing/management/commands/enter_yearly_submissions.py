@@ -3,10 +3,10 @@ import os
 import requests
 
 from django.core.management.base import BaseCommand
-from filing.models import Filing
-from django.conf import settings
+from irsdb.filing.models import Filing
 from irsx.settings import INDEX_DIRECTORY
-from irsx.file_utils import stream_download
+from irsx.file_utils import get_index_file_URL, stream_download
+
 
 BATCH_SIZE = 10000
 
@@ -25,7 +25,11 @@ class Command(BaseCommand):
         for year in options['year']:
             local_file_path = os.path.join(INDEX_DIRECTORY, "index_%s.csv" % year)
 
+            if not os.path.exists(local_file_path):
+                remoteurl = get_index_file_URL(year)
+                stream_download(remoteurl, local_file_path, verbose=True)
 
+                
             print("Entering xml submissions from %s" % local_file_path)
             fh = open(local_file_path, 'r',encoding='utf-8-sig')
             reader = csv.DictReader(fh)

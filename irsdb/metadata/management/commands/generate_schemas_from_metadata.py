@@ -3,12 +3,13 @@ import os
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from metadata.models import Variable, Group, SchedulePart
-from schemas.documentation_utils import most_recent, debracket
-from schemas.type_utils import get_django_type, get_sqlalchemy_type
+from irsdb.metadata.models import Variable, Group, SchedulePart
+from irsdb.schemas.documentation_utils import most_recent, debracket
+from irsdb.schemas.type_utils import get_django_type, get_sqlalchemy_type
+
+from irsx.settings import KNOWN_SCHEDULES
 
 GENERATED_MODELS_DIR = settings.GENERATED_MODELS_DIR
-KNOWN_SCHEDULES = settings.KNOWN_SCHEDULES
 CANONICAL_VERSION = '2016v3.0'
 soft_tab = '    '
 
@@ -116,7 +117,6 @@ class Command(BaseCommand):
 
             variables_in_this_part = Variable.objects.filter(
                 parent_sked_part=form_part.parent_sked_part,
-                version_end__in=['','2016', '2017', '2018'],
             ).exclude(in_a_group=True).order_by('ordering',)
             if variables_in_this_part:
                 # only write it if it contains anything

@@ -1,22 +1,12 @@
 import csv
-import os
-import requests
-
 from datetime import datetime
 
 from django.core.management.base import BaseCommand
-from django.conf import settings
+from irsx.filing import FileMissingException
+from irsx.xmlrunner import XMLRunner
 
-from filing.models import Filing
-from schemas.model_accumulator import Accumulator
-
-import sys
-
-sys.path.append("990-xml-reader")
-from irs_reader.settings import INDEX_DIRECTORY
-from irs_reader.file_utils import stream_download
-from irs_reader.xmlrunner import XMLRunner
-from irs_reader.filing import FileMissingException
+from irsdb.filing.models import Filing
+from irsdb.schemas.model_accumulator import Accumulator
 
 # from irs_reader.filing import FileMissingException
 
@@ -36,6 +26,9 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         # Positional arguments
         parser.add_argument("year", nargs=1, type=int)
+        parser.add_argument(
+            "--file", dest="file", help="Path of CSV file to import", required=False
+        )
 
     def setup(self):
         # get an XMLRunner -- this is what actually does the parsing
@@ -44,7 +37,7 @@ class Command(BaseCommand):
 
     def process_sked(self, sked):
         """Enter just one schedule"""
-        print("Processing schedule %s" % sked['schedule_name'])
+        print("Processing schedule %s" % sked["schedule_name"])
         for part in sked["schedule_parts"].keys():
             partname = part
             partdata = sked["schedule_parts"][part]
@@ -99,14 +92,6 @@ class Command(BaseCommand):
         else:
             print("Filing not parsed %s " % object_id)
 
-    def get_immigration_eins(self):
-        eins = set()
-        with open("../data/raw/all-immigration-ein-matches.txt", "r") as f:
-            for line in f.readlines():
-                eins.add(line.strip())
-
-        return eins
-
     def handle(self, *args, **options):
 
         year = int(options["year"][0])
@@ -134,16 +119,34 @@ class Command(BaseCommand):
         missing_filings = 0
         missed_file_list = []
 
+<<<<<<< HEAD
         eins = []
         for ein in self.get_immigration_eins():
             if len(ein) < 9:
                 eins.append(ein)
             else:
                 eins.append(ein.zfill(9))
+=======
+        eins = set()
+
+        if options["file"]:
+            with open(options["file"]) as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    eins.add(row["ein"])
+
+        Filing.objects.update(parse_complete=False, parse_started=False)
+>>>>>>> 42beccf (installable/cleanup)
         while True:
-            filings = Filing.objects.filter(submission_year=year, ein__in=eins).exclude(
-                parse_complete=True
-            )[:100]
+            if eins:
+                filings = Filing.objects.filter(
+                    submission_year=year, ein__in=eins
+                ).exclude(parse_complete=True)[:100]
+            else:
+                filings = Filing.objects.filter(submission_year=year).exclude(
+                    parse_complete=True
+                )[:100]
+
             if not filings:
                 print("Done")
                 break

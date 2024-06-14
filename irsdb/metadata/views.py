@@ -7,9 +7,7 @@ from django.template.loader import render_to_string
 
 from .models import Variable, LineNumber, Description, SchedulePart, Group
 
-
-
-KNOWN_SCHEDULES = settings.KNOWN_SCHEDULES
+from irsx.settings import KNOWN_SCHEDULES
 
 
 # We're too low rent to install django-bakery
