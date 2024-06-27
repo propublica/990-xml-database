@@ -108,5 +108,6 @@ irsdb/filing/migrations/
 irsdb/metadata/migrations/
 irsdb/return/migrations/
 
+.DS_Store
 
 nohup.out
